@@ -336,6 +336,10 @@
       transition: width 0.5s ease;
     }
 
+    .action-btn { width: 100%; padding: 13px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; margin-top: 4px; margin-bottom: 10px; display: block; text-align: center; text-decoration: none; box-sizing: border-box; }
+    .btn-neutral { background: var(--bg2); border: 1px solid var(--border2); color: var(--text); }
+    .btn-neutral:hover { background: var(--bg3); }
+
     .footer-note {
       margin-top: 1.5rem;
       padding: 14px 16px 14px 20px;
@@ -695,7 +699,12 @@
 
   <div class="footer-note">
     <div class="footer-note-icon">⚠️</div>
-    <div><strong>Tachyarrhythmia — scope reminder</strong>Pulseless rhythms require immediate CPR + code blue activation simultaneously. For unstable V-tach with a pulse, telemetry/stepdown/ICU nurses are credentialed to perform synchronized cardioversion without a provider present. If the patient is awake, defer to the acute response team for sedation decision.</div>
+    <div><strong>Pulseless rhythms — scope reminder</strong>Pulseless rhythms require immediate CPR + code blue activation, simultaneously.</div>
+  </div>
+
+  <div class="footer-note">
+    <div class="footer-note-icon">⚠️</div>
+    <div><strong>Tachyarrhythmia — scope reminder</strong>Synchronized cardioversion requires a provider present to assess for contraindications. Nursing role is early recognition, activation, and full setup — pads, sync mode, backboard, continuous pulse monitoring — so the team can act immediately on arrival.</div>
   </div>
 
   <div class="footer-note">
@@ -840,18 +849,25 @@ const scenarios = [
       {
         type: 'action',
         tag: 'Next',
-        text: 'Apply pads',
-        sub: 'Pads on immediately regardless of what comes next.'
+        text: 'Prepare the room',
+        sub: 'Pads on immediately.<div style="margin-top:8px;padding:10px 12px;background:rgba(37,99,235,0.04);border:1px solid var(--blue-border);border-radius:var(--radius-sm);"><div class="cause-row"><div class="cause-dot"></div><span>Sync mode staged — energy per provider order (100J per AHA guidance for monomorphic VT)</span></div><div class="cause-row"><div class="cause-dot"></div><span>Backboard placed now, in case patient transitions to pulseless ventricular rhythm</span></div><div class="cause-row" style="margin-bottom:0;"><div class="cause-dot"></div><span>Continuous manual femoral pulse check assigned as a role, until interventions have been performed or patient is deemed stable</span></div></div>'
       },
       {
         type: 'caution',
         tag: 'Assess',
         text: 'Is the patient conscious?',
+        sub: 'This informs what the provider will weigh on arrival — not a decision you\'re making independently.',
         branch: true,
         branches: [
-          { icon: 'alert', text: 'Unresponsive or rapidly deteriorating → prepare to cardiovert (synchronized) at 100J per AHA. You are credentialed to perform this without a provider present.' },
-          { icon: 'ok', text: 'Awake and communicating → prepare pads, monitor closely, wait for acute response team. Cardioversion in a conscious patient causes significant discomfort — provider makes sedation decision.' }
+          { icon: 'alert', text: 'Unresponsive or rapidly deteriorating → sedation likely isn\'t feasible or needed. Provider may move straight to cardioversion once contraindications are cleared.' },
+          { icon: 'ok', text: 'Awake and communicating → provider will weigh sedation before cardioverting. Keep reassessing — your setup doesn\'t change.' }
         ]
+      },
+      {
+        type: 'caution',
+        tag: 'Hold',
+        text: 'Prepare and wait',
+        sub: 'Cardioversion requires a provider present to rule out contraindications and confirm sync mode/energy. Do not cardiovert independently. If the patient goes pulseless, reassess the rhythm before assuming V-fib/pVT — it may be PEA or asystole instead, and the pathway differs.<div style="margin-top:8px;padding:10px 12px;background:rgba(37,99,235,0.04);border:1px solid var(--blue-border);border-radius:var(--radius-sm);"><div class="cause-row"><div class="cause-dot"></div><span>If shockable, see <a href="#" onclick="selectScenario(\'pvf\'); document.getElementById(\'walkthrough\')?.scrollIntoView({behavior:\'smooth\',block:\'start\'}); return false;" style="color:var(--blue);text-decoration:underline;">Pulseless V-fib / pulseless V-tach</a></span></div><div class="cause-row" style="margin-bottom:0;"><div class="cause-dot"></div><span>If non-shockable, see <a href="#" onclick="selectScenario(\'pea\'); document.getElementById(\'walkthrough\')?.scrollIntoView({behavior:\'smooth\',block:\'start\'}); return false;" style="color:var(--blue);text-decoration:underline;">PEA</a> or <a href="#" onclick="selectScenario(\'asys\'); document.getElementById(\'walkthrough\')?.scrollIntoView({behavior:\'smooth\',block:\'start\'}); return false;" style="color:var(--blue);text-decoration:underline;">Asystole</a></span></div></div>'
       }
     ]
   },
@@ -958,18 +974,25 @@ const scenarios = [
       {
         type: 'action',
         tag: 'Next',
-        text: 'Apply pads',
-        sub: 'On immediately — regardless of what comes next.'
+        text: 'Prepare the room',
+        sub: 'Pads on immediately.<div style="margin-top:8px;padding:10px 12px;background:rgba(37,99,235,0.04);border:1px solid var(--blue-border);border-radius:var(--radius-sm);"><div class="cause-row"><div class="cause-dot"></div><span>Sync mode staged — energy per provider order (50–100J per AHA guidance for SVT)</span></div><div class="cause-row"><div class="cause-dot"></div><span>Backboard placed now — low-frequency but not impossible transition to pulseless rhythm, so the room is ready either way</span></div><div class="cause-row" style="margin-bottom:0;"><div class="cause-dot"></div><span>Continuous manual femoral pulse check assigned as a role, until interventions have been performed or patient is deemed stable</span></div></div>'
       },
       {
         type: 'caution',
         tag: 'Assess',
         text: 'Is the patient conscious?',
+        sub: 'This informs what the provider will weigh on arrival — not a decision you\'re making independently.',
         branch: true,
         branches: [
-          { icon: 'alert', text: 'Unresponsive or rapidly deteriorating → synchronized cardioversion 50–100J per provider order. Confirm sync mode is active on the ZOLL before delivering shock.' },
-          { icon: 'ok', text: 'Awake and communicating → prepare pads, monitor closely, wait for acute response team. Cardioversion in a conscious patient causes significant discomfort — provider makes sedation decision.' }
+          { icon: 'alert', text: 'Unresponsive or rapidly deteriorating → sedation likely isn\'t feasible or needed. Provider may move straight to cardioversion once contraindications are cleared.' },
+          { icon: 'ok', text: 'Awake and communicating → provider will weigh sedation before cardioverting. Keep reassessing — your setup doesn\'t change.' }
         ]
+      },
+      {
+        type: 'caution',
+        tag: 'Hold',
+        text: 'Prepare and wait',
+        sub: 'Cardioversion requires a provider present to rule out contraindications and confirm sync mode/energy. Do not cardiovert independently. If the patient goes pulseless, reassess the rhythm before assuming V-fib/pVT — it may be PEA or asystole instead, and the pathway differs.<div style="margin-top:8px;padding:10px 12px;background:rgba(37,99,235,0.04);border:1px solid var(--blue-border);border-radius:var(--radius-sm);"><div class="cause-row"><div class="cause-dot"></div><span>If shockable, see <a href="#" onclick="selectScenario(\'pvf\'); document.getElementById(\'walkthrough\')?.scrollIntoView({behavior:\'smooth\',block:\'start\'}); return false;" style="color:var(--blue);text-decoration:underline;">Pulseless V-fib / pulseless V-tach</a></span></div><div class="cause-row" style="margin-bottom:0;"><div class="cause-dot"></div><span>If non-shockable, see <a href="#" onclick="selectScenario(\'pea\'); document.getElementById(\'walkthrough\')?.scrollIntoView({behavior:\'smooth\',block:\'start\'}); return false;" style="color:var(--blue);text-decoration:underline;">PEA</a> or <a href="#" onclick="selectScenario(\'asys\'); document.getElementById(\'walkthrough\')?.scrollIntoView({behavior:\'smooth\',block:\'start\'}); return false;" style="color:var(--blue);text-decoration:underline;">Asystole</a></span></div></div>'
       }
     ]
   },
@@ -1200,6 +1223,7 @@ const scenarios = [
     examples: ['assets/sbrad-1.jpg'],
     captions: [null],
     credit: 'litfl',
+    practiceLink: true,
     steps: [
       { type: 'paired', tag: 'Symptomatic means — act now', text: 'Patient is showing signs of hemodynamic compromise', sub: 'Hypotension, altered mentation, diaphoresis, chest pain, syncope, or near-syncope. The rate alone does not make this an emergency — the patient\'s response to it does.' },
       { type: 'action', tag: 'First', text: 'Activate rapid response and notify primary team urgently', sub: 'Call both simultaneously. Give full vitals and clinical picture. Do not wait for one response before making the other call.' },
@@ -1274,6 +1298,7 @@ const scenarios = [
     examples: ['assets/mobitz2-1.jpg'],
     captions: ['Arrows indicate dropped QRS complexes (non-conducted P waves)'],
     credit: 'litfl',
+    practiceLink: true,
     steps: [
       { type: 'caution', tag: 'Understand the difference', text: 'This is not Wenckebach — the risk profile is different', cautionText: 'Mobitz II drops beats without warning. The PR interval is constant — then a P wave suddenly fails to conduct. This is an infranodal block, below the AV node. There is no progressive lengthening to signal a drop is coming. A patient can look completely fine and then drop to complete block or asystole without warning.' },
       { type: 'info', tag: 'Assess', text: 'Evaluate the patient fully', sub: 'Rate, symptoms, hemodynamic stability. A well-perfused patient may tolerate this rhythm — but the rhythm itself is unpredictable regardless of how the patient currently looks.' },
@@ -1293,6 +1318,7 @@ const scenarios = [
     examples: ['assets/chb-1.jpg', 'assets/chb-2.jpg'],
     captions: ['AV dissociation present; atrial rate ~100 bpm independent of ventricular rate ~40 bpm', null],
     credit: 'litfl',
+    practiceLink: true,
     steps: [
       { type: 'paired', tag: 'Escalate now', text: 'Activate rapid response immediately', sub: 'P waves and QRS complexes are firing independently — there is no communication between atria and ventricles. The ventricular rate is maintained only by a slow escape rhythm. This is not a "notify and monitor" situation.' },
       { type: 'action', tag: 'Next', text: 'Apply pads — anterior-posterior placement', sub: 'Anterior: left precordium. Posterior: left infrascapular, between spine and scapula at the same level. Refer to pad package insert for landmarks. Pads on now — team must intervene, and TCP needs to be ready.' },
@@ -1313,8 +1339,8 @@ function svtWave(u){if(u<0.08)return 0;if(u>=0.08&&u<0.13)return(u-0.08)/0.05*1.
 function sbradWave(t){const r=1.5,p=t%r;if(p<0.09)return 0.18*Math.sin(Math.PI*p/0.09);if(p>=0.11&&p<0.14)return -0.12*Math.sin(Math.PI*(p-0.11)/0.03);if(p>=0.14&&p<0.20)return 1.15*Math.sin(Math.PI*(p-0.14)/0.06);if(p>=0.20&&p<0.24)return -0.28*Math.sin(Math.PI*(p-0.20)/0.04);if(p>=0.26&&p<0.46)return 0.22*Math.sin(Math.PI*(p-0.26)/0.20);return 0;}
 function jxnWave(t){const r=1.35,p=t%r;if(p<0.07)return 1.05*Math.sin(Math.PI*p/0.07);if(p>=0.07&&p<0.11)return -0.22*Math.sin(Math.PI*(p-0.07)/0.04);if(p>=0.13&&p<0.33)return 0.18*Math.sin(Math.PI*(p-0.13)/0.20);return 0;}
 function avb1Wave(t){const r=1.1,p=t%r;if(p<0.09)return 0.16*Math.sin(Math.PI*p/0.09);if(p>=0.24&&p<0.27)return -0.10*Math.sin(Math.PI*(p-0.24)/0.03);if(p>=0.27&&p<0.33)return 1.1*Math.sin(Math.PI*(p-0.27)/0.06);if(p>=0.33&&p<0.37)return -0.25*Math.sin(Math.PI*(p-0.33)/0.04);if(p>=0.39&&p<0.59)return 0.20*Math.sin(Math.PI*(p-0.39)/0.20);return 0;}
-function wenckWave(t){const cycle=1.2,beats=[0,cycle,cycle*2,cycle*3+0.35],prs=[0.14,0.22,0.30];let v=0;beats.forEach((b,i)=>{const p=t-b;if(i<3&&p>=0&&p<0.09)v+=0.16*Math.sin(Math.PI*p/0.09);if(i<3){const pr=prs[i],qp=p-pr;if(qp>=0&&qp<0.07)v+=1.1*Math.sin(Math.PI*qp/0.07);if(qp>=0.07&&qp<0.11)v-=0.25*Math.sin(Math.PI*(qp-0.07)/0.04);if(qp>=0.13&&qp<0.33)v+=0.18*Math.sin(Math.PI*(qp-0.13)/0.20);}if(i===3&&p>=0&&p<0.09)v+=0.16*Math.sin(Math.PI*p/0.09);});return v;}
-function mobitz2Wave(t){const cycle=1.05,beats=[0,cycle,cycle*2+0.5];let v=0;beats.forEach((b,i)=>{const p=t-b;if(p>=0&&p<0.09)v+=0.16*Math.sin(Math.PI*p/0.09);if(i!==2){const pr=0.20,qp=p-pr;if(qp>=0&&qp<0.07)v+=1.1*Math.sin(Math.PI*qp/0.07);if(qp>=0.07&&qp<0.11)v-=0.25*Math.sin(Math.PI*(qp-0.07)/0.04);if(qp>=0.13&&qp<0.33)v+=0.18*Math.sin(Math.PI*(qp-0.13)/0.20);}});return v;}
+function wenckWave(t){const pInterval=0.9,groupSize=4,superCycle=pInterval*groupSize,prSteps=[0.14,0.20,0.28];const localT=((t%superCycle)+superCycle)%superCycle;let v=0;for(let i=0;i<groupSize;i++){const b=i*pInterval,p=localT-b;if(p<0||p>=pInterval)continue;if(p>=0&&p<0.09)v+=0.16*Math.sin(Math.PI*p/0.09);const conducted=i<3;if(conducted){const pr=prSteps[i],qp=p-pr;if(qp>=0&&qp<0.07)v+=1.1*Math.sin(Math.PI*qp/0.07);if(qp>=0.07&&qp<0.11)v-=0.25*Math.sin(Math.PI*(qp-0.07)/0.04);if(qp>=0.13&&qp<0.33)v+=0.18*Math.sin(Math.PI*(qp-0.13)/0.20);}}return v;}
+function mobitz2Wave(t){const pInterval=1.05,groupSize=3,superCycle=pInterval*groupSize;const localT=((t%superCycle)+superCycle)%superCycle;let v=0;for(let i=0;i<groupSize;i++){const b=i*pInterval,p=localT-b;if(p<0||p>=pInterval)continue;if(p>=0&&p<0.09)v+=0.16*Math.sin(Math.PI*p/0.09);const conducted=i!==groupSize-1;if(conducted){const pr=0.20,qp=p-pr;if(qp>=0&&qp<0.07)v+=1.1*Math.sin(Math.PI*qp/0.07);if(qp>=0.07&&qp<0.11)v-=0.25*Math.sin(Math.PI*(qp-0.07)/0.04);if(qp>=0.13&&qp<0.33)v+=0.18*Math.sin(Math.PI*(qp-0.13)/0.20);}}return v;}
 function chbWave(t){const pRate=0.65,qRate=1.8;let v=0;for(let i=0;i<7;i++){const p=t-(i*pRate);if(p>=0&&p<0.09)v+=0.14*Math.sin(Math.PI*p/0.09);}for(let j=0;j<3;j++){const q=t-(j*qRate+0.3);if(q>=0&&q<0.07)v+=1.1*Math.sin(Math.PI*q/0.07);if(q>=0.07&&q<0.13)v-=0.28*Math.sin(Math.PI*(q-0.07)/0.06);if(q>=0.15&&q<0.38)v+=0.22*Math.sin(Math.PI*(q-0.15)/0.23);}return v;}
 
 function drawWalkthroughRhythm(canvasId, waveFn, isSvt){
@@ -1327,7 +1353,9 @@ function drawWalkthroughRhythm(canvasId, waveFn, isSvt){
   const ctx = cv.getContext('2d');
   ctx.scale(dpr, dpr);
   ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0,0,W,H);
-  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.2; ctx.beginPath();
+  ctx.strokeStyle = 'rgba(74,222,128,0.10)'; ctx.lineWidth = 0.5;
+  for(let x=0;x<W;x+=20){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.beginPath();
   const r = 0.22;
   for(let x=0;x<W;x++){
     const t=(x/W)*4;
@@ -1523,6 +1551,7 @@ function renderWalkthrough(scenario) {
         </div>
       </div>
     `).join('')}
+    ${scenario.practiceLink ? `<a class="action-btn btn-neutral" href="pacing-practice.html" target="_blank" rel="noopener">Practice TCP on the ZOLL ↗</a>` : ''}
   `;
 
   progress.style.width = '0%';
