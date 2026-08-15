@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shock Sequence — ALERT Team</title>
+<style>
+  :root {
+    --bg: #f0f4f8; --bg2: #ffffff; --bg3: #f5f7fa;
+    --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.15);
+    --text: #111827; --text2: #4b5563; --text3: #9ca3af;
+    --green: #059669; --green-bg: rgba(5,150,105,0.08); --green-border: rgba(5,150,105,0.25);
+    --red: #dc2626; --red-bg: rgba(220,38,38,0.08); --red-border: rgba(220,38,38,0.25);
+    --blue: #2563eb; --blue-bg: rgba(37,99,235,0.08); --blue-border: rgba(37,99,235,0.25);
+    --amber: #d97706; --amber-bg: rgba(217,119,6,0.08); --amber-border: rgba(217,119,6,0.25);
+    --coral: #ea580c; --coral-bg: rgba(234,88,12,0.08); --coral-border: rgba(234,88,12,0.25);
+    --purple: #7c3aed; --purple-bg: rgba(124,58,237,0.08); --purple-border: rgba(124,58,237,0.25);
+    --radius: 10px; --radius-sm: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; padding: 0 0 5rem; }
+  header { background: #151c30; border-bottom: 3px solid; border-image: linear-gradient(90deg, #ea580c 0%, #2563eb 100%) 1; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 100; }
+  .header-icon { width: 36px; height: 36px; background: var(--blue-bg); border: 1px solid var(--blue-border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .header-icon svg { width: 18px; height: 18px; stroke: var(--blue); fill: var(--blue); stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
+  header h1 { font-size: 16px; font-weight: 600; color: #f3f4f6; letter-spacing: -0.01em; }
+  header p { font-size: 12px; color: #9ca3af; margin-top: 1px; }
+  .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .tag { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9ca3af; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 4px 10px; border-radius: 20px; }
+  .code-timer { font-family: 'SF Mono', Consolas, monospace; font-size: 15px; font-weight: 700; color: #fbbf24; background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.25); padding: 4px 12px; border-radius: 20px; letter-spacing: 0.02em; }
+  .code-timer-label { font-size: 8px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #92640a; display: block; text-align: center; margin-bottom: 1px; }
+
+  main { max-width: 480px; margin: 0 auto; padding: 1.5rem 1rem; }
+
+  a.back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.15s; }
+  a.back-link:hover { color: var(--text); }
+  a.back-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .caveat-card { background: var(--amber-bg); border: 1px solid var(--amber-border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 1.5rem; font-size: 13px; line-height: 1.6; color: var(--text); }
+  .caveat-card strong { color: var(--amber); }
+
+  .overview-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--blue); text-decoration: none; margin-bottom: 1.5rem; }
+  .overview-link:hover { text-decoration: underline; }
+
+  .progress-row { display: flex; gap: 6px; margin-bottom: 1rem; }
+  .progress-dot { flex: 1; height: 4px; border-radius: 2px; background: var(--border2); }
+  .progress-dot.done { background: var(--amber); }
+
+  .say-card { background: var(--amber-bg); border: 1px solid var(--amber-border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 14px; }
+  .say-card .say-label { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--amber); margin-bottom: 4px; }
+  .say-card .say-text { font-size: 21px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .say-card.compact { padding: 10px 14px; margin-bottom: 16px; }
+  .say-card.compact .say-text { font-size: 15px; font-weight: 600; }
+
+  .lead-in { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+
+  .ref-img { width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border2); display: block; margin: 0 0 16px; }
+
+  .note-text { font-size: 13px; color: var(--text2); margin-bottom: 14px; line-height: 1.5; }
+  .warn-note { font-size: 13px; font-weight: 600; color: var(--coral); background: var(--coral-bg); border: 1px solid var(--coral-border); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 16px; line-height: 1.5; }
+
+  .step-bullets { list-style: none; margin: 0 0 14px; padding: 0; }
+  .step-bullets li { font-size: 17px; line-height: 1.6; color: var(--text); padding-left: 20px; position: relative; margin-bottom: 8px; }
+  .step-bullets li::before { content: '\2022'; position: absolute; left: 4px; color: var(--text3); }
+
+  .step-body { font-size: 17px; line-height: 1.6; color: var(--text); margin: 0 0 18px; }
+  .step-body b { font-weight: 700; }
+  .big-call { font-size: 26px; font-weight: 700; color: var(--text); line-height: 1.3; margin: 0 0 20px; text-align: center; }
+
+  .sweep-card { background: var(--red-bg); border: 2px solid var(--red-border); border-radius: var(--radius); padding: 20px 18px; margin-bottom: 18px; text-align: center; }
+  .sweep-card .sweep-title { font-size: 22px; font-weight: 700; color: var(--red); letter-spacing: 0.01em; line-height: 1.25; margin-bottom: 8px; }
+  .sweep-card .sweep-sub { font-size: 15px; font-weight: 600; color: var(--red); line-height: 1.4; }
+
+  .timer-block { text-align: center; margin: 4px 0 16px; }
+  .timer-val { font-family: 'SF Mono', Consolas, monospace; font-size: 42px; font-weight: 700; color: var(--text); }
+  .timer-label { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .timer-label.charged { color: var(--green); font-weight: 600; }
+
+  .next-btn { width: 100%; padding: 18px; border-radius: var(--radius); border: none; font-size: 17px; font-weight: 700; color: #fff; background: #151c30; cursor: pointer; transition: opacity 0.15s; letter-spacing: 0.01em; }
+  .next-btn:active { opacity: 0.8; }
+
+  .branch-prompt { font-size: 13px; color: var(--text2); margin-bottom: 10px; text-align: center; }
+  .branch-row { display: flex; flex-direction: column; gap: 10px; }
+  .branch-btn { padding: 20px 16px; border-radius: var(--radius); font-size: 17px; font-weight: 700; cursor: pointer; text-align: center; transition: opacity 0.15s; }
+  .branch-btn:active { opacity: 0.8; }
+  .branch-btn.shock { background: var(--red-bg); border: 1.5px solid var(--red-border); color: var(--red); }
+  .branch-btn.noshock { background: var(--blue-bg); border: 1.5px solid var(--blue-border); color: var(--blue); }
+
+  .control-row { display: flex; gap: 10px; margin-top: 1.5rem; justify-content: center; }
+  .control-btn { font-size: 12px; color: var(--text3); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 4px; }
+
+  footer { text-align: center; padding: 1.5rem; font-size: 11px; color: var(--text3); border-top: 1px solid var(--border); margin-top: 2rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-icon">
+    <svg viewBox="0 0 24 24"><path d="M13 3L4 14h7l-1 7 9-11h-7l1-7z"/></svg>
+  </div>
+  <div>
+    <h1>Shock Sequence</h1>
+    <p>ALERT Team</p>
+  </div>
+  <div class="header-right">
+    <div>
+      <span class="code-timer-label">Code time</span>
+      <div class="code-timer" id="codeTimer">00:00</div>
+    </div>
+    <span class="tag">Code Blue Aid</span>
+  </div>
+</header>
+
+<main>
+
+  <a class="back-link" href="index.html">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to home
+  </a>
+
+  <div class="caveat-card">
+    <strong>Built for mid-code use.</strong> One step at a time, big targets, no reading required. Timers here are informational only &mdash; they don't gate you from moving forward. Tap through at your own pace.
+  </div>
+
+  <a class="overview-link" href="assets/shock-sequence-job-aid.pdf" target="_blank" rel="noopener">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    View the full sequence (PDF)
+  </a>
+
+  <div class="progress-row" id="progressRow"></div>
+  <div id="stepwrap"></div>
+
+  <div class="control-row">
+    <button class="control-btn" id="backBtn">Back</button>
+    <button class="control-btn" id="resetBtn">Restart sequence</button>
+  </div>
+
+</main>
+
+<footer>
+  Cristian Rosa, RN, MSN, CCRN &middot; ALERT Team, UCI Health &middot; No data leaves this device
+</footer>
+
+<script>
+const steps = [
+  {
+    key:'precharge', leadIn:'<u>Get the pads on as soon as possible.</u>',
+    say:'PRECHARGING', bullets:['Confirm DEFIB mode'],
+    warnNote:'You must be ready to interpret the rhythm once compressions are stopped.',
+    next:'PRESS CHARGE'
+  },
+  {
+    key:'hold-branch', branch:true,
+    say:'Finger on a pulse, next compressor get ready, HOLD COMPRESSIONS',
+    note:'Rhythm can\'t be identified while compressions are ongoing.',
+    timer:true,
+    announce:'Announce the rhythm — out loud, so the whole room hears intention'
+  }
+];
+const shockPath = [
+  { key:'clear', say:'CLEAR', sweep:{ title:'PERFORM VISUAL SWEEP', sub:'Do not shock your team. No O2 source near the patient.' }, next:'Shock delivered' },
+  { key:'resume-shock', say:'RESUME COMPRESSIONS', note:'Don\'t recheck pulse.', next:'Next cycle', loopEnd:true }
+];
+const nonShockPath = [
+  { key:'disarm', say:'DISARMING — RESUME COMPRESSIONS IMMEDIATELY', img:'assets/disarm-button.jpg', next:'Disarmed', loopEnd:true }
+];
+
+let path = null, idx = 0, timerHandle = null, history = [];
+const wrap = document.getElementById('stepwrap');
+const progressRow = document.getElementById('progressRow');
+
+function renderProgress(){
+  progressRow.innerHTML = '';
+  const n = steps.length;
+  const activeIdx = path ? n : idx;
+  for(let i=0;i<n;i++){
+    const dot = document.createElement('div');
+    dot.className = 'progress-dot' + (i < activeIdx ? ' done' : '');
+    progressRow.appendChild(dot);
+  }
+}
+
+function pushHistory(){
+  history.push({ path: path, idx: idx });
+}
+
+function render(){
+  clearInterval(timerHandle);
+  renderProgress();
+  const seq = path || steps;
+  const step = seq[idx];
+  let html = '';
+
+  if(step.leadIn){
+    html += '<div class="lead-in">' + step.leadIn + '</div>';
+  }
+  if(step.say){
+    html += '<div class="say-card"><div class="say-label">Say</div><div class="say-text">' + step.say + '</div></div>';
+  }
+  if(step.note){
+    html += '<p class="note-text">' + step.note + '</p>';
+  }
+  if(step.bullets){
+    html += '<ul class="step-bullets">';
+    step.bullets.forEach(b => html += '<li>' + b + '</li>');
+    html += '</ul>';
+  }
+  if(step.img){
+    html += '<img class="ref-img" src="' + step.img + '" alt="ZOLL screen showing the physical button beneath the on-screen DISARM label" />';
+  }
+  if(step.say2){
+    html += '<div class="say-card"><div class="say-label">Say</div><div class="say-text">' + step.say2 + '</div></div>';
+  }
+  if(step.warnNote){
+    html += '<div class="warn-note">' + step.warnNote + '</div>';
+  }
+  if(step.timer){
+    html += '<div class="timer-block"><div class="timer-val" id="tval">0.0s</div><div class="timer-label" id="tlabel">informational — device charges around 4.5s</div></div>';
+  }
+  if(step.announce){
+    html += '<div class="say-card compact"><div class="say-label">Announce</div><div class="say-text">' + step.announce + '</div></div>';
+  }
+  if(step.sweep){
+    html += '<div class="sweep-card"><div class="sweep-title">' + step.sweep.title + '</div><div class="sweep-sub">' + step.sweep.sub + '</div></div>';
+  }
+  if(step.body){
+    html += '<div class="step-body">';
+    step.body.forEach(b => html += '<p>' + b + '</p>');
+    html += '</div>';
+  }
+  if(step.bigCall){
+    html += '<div class="big-call">' + step.bigCall + '</div>';
+  }
+
+  if(step.branch){
+    html += '<div class="branch-prompt"><b>No pulse?</b> — choose the rhythm</div>';
+    html += '<div class="branch-row">';
+    html += '<div class="branch-btn shock" id="bshock">Shockable — VF / pVT</div>';
+    html += '<div class="branch-btn noshock" id="bnoshock">Non-shockable — PEA / asystole</div>';
+    html += '</div>';
+  } else {
+    html += '<button class="next-btn" id="bnext">' + step.next + '</button>';
+  }
+
+  wrap.innerHTML = html;
+
+  if(step.timer){
+    let t = 0;
+    const tval = document.getElementById('tval');
+    const tlabel = document.getElementById('tlabel');
+    timerHandle = setInterval(() => {
+      t += 0.1;
+      tval.textContent = t.toFixed(1) + 's';
+      if(t >= 4.5 && t < 4.6){
+        tlabel.textContent = 'device charged';
+        tlabel.classList.add('charged');
+      }
+      if(t >= 10) clearInterval(timerHandle);
+    }, 100);
+  }
+
+  if(step.branch){
+    document.getElementById('bshock').onclick = () => { pushHistory(); path = shockPath; idx = 0; render(); };
+    document.getElementById('bnoshock').onclick = () => { pushHistory(); path = nonShockPath; idx = 0; render(); };
+  } else {
+    document.getElementById('bnext').onclick = () => {
+      pushHistory();
+      if(step.loopEnd){ path = null; idx = 0; render(); return; }
+      idx++;
+      render();
+    };
+  }
+}
+
+document.getElementById('resetBtn').addEventListener('click', () => { history = []; path = null; idx = 0; render(); });
+document.getElementById('backBtn').addEventListener('click', () => {
+  if(history.length === 0) return;
+  const prev = history.pop();
+  path = prev.path; idx = prev.idx;
+  render();
+});
+
+render();
+
+let codeSeconds = 0;
+const codeTimerEl = document.getElementById('codeTimer');
+setInterval(() => {
+  codeSeconds++;
+  const m = Math.floor(codeSeconds / 60);
+  const s = codeSeconds % 60;
+  codeTimerEl.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}, 1000);
+</script>
+
+</body>
+</html>
