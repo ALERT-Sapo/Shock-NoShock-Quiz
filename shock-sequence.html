@@ -38,8 +38,15 @@
   .caveat-card { background: var(--amber-bg); border: 1px solid var(--amber-border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 1.5rem; font-size: 13px; line-height: 1.6; color: var(--text); }
   .caveat-card strong { color: var(--amber); }
 
-  .overview-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--blue); text-decoration: none; margin-bottom: 1.5rem; }
+  .overview-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--blue); background: none; border: none; cursor: pointer; text-decoration: none; margin-bottom: 1.5rem; padding: 0; font-family: inherit; }
   .overview-link:hover { text-decoration: underline; }
+
+  .pdf-panel { display: none; margin-bottom: 1.5rem; }
+  .pdf-panel.open { display: block; }
+  .pdf-panel-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .pdf-panel-hdr span { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text3); }
+  .pdf-close-btn { font-size: 12px; color: var(--text2); background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 4px 10px; cursor: pointer; }
+  .pdf-panel iframe { width: 100%; height: 60vh; border: 1px solid var(--border2); border-radius: var(--radius); display: block; }
 
   .progress-row { display: flex; gap: 6px; margin-bottom: 1rem; }
   .progress-dot { flex: 1; height: 4px; border-radius: 2px; background: var(--border2); }
@@ -121,10 +128,18 @@
     <strong>Built for mid-code use.</strong> One step at a time, big targets, no reading required. Timers here are informational only &mdash; they don't gate you from moving forward. Tap through at your own pace.
   </div>
 
-  <a class="overview-link" href="assets/shock-sequence-job-aid.pdf" target="_blank" rel="noopener">
+  <button class="overview-link" id="pdfToggle" type="button">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
     View the full sequence (PDF)
-  </a>
+  </button>
+
+  <div class="pdf-panel" id="pdfPanel">
+    <div class="pdf-panel-hdr">
+      <span>Full sequence reference</span>
+      <button class="pdf-close-btn" id="pdfClose" type="button">Close</button>
+    </div>
+    <iframe id="pdfFrame" src="" title="Shock sequence job aid PDF"></iframe>
+  </div>
 
   <div class="progress-row" id="progressRow"></div>
   <div id="stepwrap"></div>
@@ -193,16 +208,16 @@ function render(){
   if(step.leadIn){
     html += '<div class="lead-in">' + step.leadIn + '</div>';
   }
+  if(step.bullets){
+    html += '<ul class="step-bullets">';
+    step.bullets.forEach(b => html += '<li>' + b + '</li>');
+    html += '</ul>';
+  }
   if(step.say){
     html += '<div class="say-card"><div class="say-label">Say</div><div class="say-text">' + step.say + '</div></div>';
   }
   if(step.note){
     html += '<p class="note-text">' + step.note + '</p>';
-  }
-  if(step.bullets){
-    html += '<ul class="step-bullets">';
-    step.bullets.forEach(b => html += '<li>' + b + '</li>');
-    html += '</ul>';
   }
   if(step.img){
     html += '<img class="ref-img" src="' + step.img + '" alt="ZOLL screen showing the physical button beneath the on-screen DISARM label" />';
@@ -277,6 +292,17 @@ document.getElementById('backBtn').addEventListener('click', () => {
   const prev = history.pop();
   path = prev.path; idx = prev.idx;
   render();
+});
+
+const pdfPanel = document.getElementById('pdfPanel');
+const pdfFrame = document.getElementById('pdfFrame');
+document.getElementById('pdfToggle').addEventListener('click', () => {
+  if(!pdfFrame.src) pdfFrame.src = 'assets/shock-sequence-job-aid.pdf';
+  pdfPanel.classList.add('open');
+  pdfPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+document.getElementById('pdfClose').addEventListener('click', () => {
+  pdfPanel.classList.remove('open');
 });
 
 render();
