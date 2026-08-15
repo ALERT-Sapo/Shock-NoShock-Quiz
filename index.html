@@ -154,6 +154,7 @@
     .tool-card.cases:hover { border-color: var(--green); }
     .tool-card.sbar:hover { border-color: var(--purple); }
     .tool-card.pacing:hover { border-color: var(--amber); }
+    .tool-card.shock:hover { border-color: var(--blue); }
 
     .card-icon {
       width: 44px;
@@ -170,6 +171,7 @@
     .card-icon.cases { background: var(--green-bg); border: 1px solid var(--green-border); }
     .card-icon.sbar { background: var(--purple-bg); border: 1px solid var(--purple-border); }
     .card-icon.pacing { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+    .card-icon.shock { background: var(--blue-bg); border: 1px solid var(--blue-border); }
 
     .card-icon svg {
       width: 22px; height: 22px; fill: none;
@@ -181,6 +183,7 @@
     .card-icon.cases svg { stroke: var(--green); }
     .card-icon.sbar svg { stroke: var(--purple); }
     .card-icon.pacing svg { stroke: var(--amber); fill: var(--amber); }
+    .card-icon.shock svg { stroke: var(--blue); fill: var(--blue); }
 
     .card-body { flex: 1; }
 
@@ -197,6 +200,7 @@
     .card-tag.cases { color: var(--green); }
     .card-tag.sbar { color: var(--purple); }
     .card-tag.pacing { color: var(--amber); }
+    .card-tag.shock { color: var(--blue); }
 
     .card-title {
       font-size: 16px;
@@ -238,6 +242,7 @@
     .card-arrow.cases { background: var(--green-bg); }
     .card-arrow.sbar { background: var(--purple-bg); }
     .card-arrow.pacing { background: var(--amber-bg); }
+    .card-arrow.shock { background: var(--blue-bg); }
 
     .card-arrow svg {
       width: 14px; height: 14px; fill: none;
@@ -249,6 +254,7 @@
     .card-arrow.cases svg { stroke: var(--green); }
     .card-arrow.sbar svg { stroke: var(--purple); }
     .card-arrow.pacing svg { stroke: var(--amber); }
+    .card-arrow.shock svg { stroke: var(--blue); }
 
     .divider {
       display: flex;
@@ -483,6 +489,23 @@
       <div class="card-footer">
         <span class="card-meta">Reference · 14 walkthroughs</span>
         <div class="card-arrow decision">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <a class="tool-card shock" href="shock-sequence.html">
+      <div class="card-icon shock">
+        <svg viewBox="0 0 24 24"><path d="M13 3L4 14h7l-1 7 9-11h-7l1-7z"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-tag shock">Code Blue Aid</div>
+        <div class="card-title">Shock Sequence</div>
+        <div class="card-desc">Step-by-step prompts and timing for the precharge-to-shock sequence, built to run mid-code.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-meta">Job aid · Code timer</span>
+        <div class="card-arrow shock">
           <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </div>
