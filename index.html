@@ -302,6 +302,139 @@
       .card-grid { grid-template-columns: 1fr; }
       .intro h2 { font-size: 20px; }
     }
+
+    .install-banner {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      margin-top: 14px;
+    }
+
+    .install-banner-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .install-icon {
+      width: 30px; height: 30px;
+      background: var(--blue-bg);
+      border: 1px solid var(--blue-border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .install-icon svg {
+      width: 15px; height: 15px; fill: none;
+      stroke: var(--blue); stroke-width: 2;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .install-heading {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .install-heading strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .install-heading span {
+      display: block;
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 1px;
+    }
+
+    .install-dismiss {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      color: var(--text3);
+    }
+
+    .install-dismiss:hover { background: var(--bg3); color: var(--text); }
+
+    .install-dismiss svg {
+      width: 15px; height: 15px; fill: none;
+      stroke: currentColor; stroke-width: 2;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .install-tabs {
+      display: flex;
+      gap: 6px;
+      margin: 12px 0 10px;
+    }
+
+    .install-tab {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text2);
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      cursor: pointer;
+    }
+
+    .install-tab.active {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .install-steps {
+      list-style: none;
+      counter-reset: install-step;
+      display: none;
+    }
+
+    .install-steps.active { display: block; }
+
+    .install-steps li {
+      counter-increment: install-step;
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.5;
+      padding-left: 26px;
+      position: relative;
+      margin-bottom: 6px;
+    }
+
+    .install-steps li:last-child { margin-bottom: 0; }
+
+    .install-steps li::before {
+      content: counter(install-step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 18px; height: 18px;
+      background: var(--blue-bg);
+      border: 1px solid var(--blue-border);
+      color: var(--blue);
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .install-steps strong { color: var(--text); font-weight: 600; }
   </style>
 </head>
 <body>
@@ -441,11 +574,82 @@
     </div>
   </div>
 
+  <div class="install-banner" id="installBanner">
+    <div class="install-banner-top">
+      <div class="install-icon">
+        <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      </div>
+      <div class="install-heading">
+        <strong>Add Sentinel to your home screen</strong>
+        <span>Get one-tap access next time — no browser, no bookmarks.</span>
+      </div>
+      <button class="install-dismiss" id="installDismiss" aria-label="Dismiss">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="install-tabs">
+      <button class="install-tab active" id="tabIOS">iPhone / iPad</button>
+      <button class="install-tab" id="tabAndroid">Android</button>
+    </div>
+    <ol class="install-steps active" id="stepsIOS">
+      <li>Open this page in <strong>Safari</strong> (not another browser).</li>
+      <li>Tap the <strong>Share</strong> icon (square with an arrow) in the toolbar.</li>
+      <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
+      <li>Tap <strong>Add</strong> in the top right.</li>
+    </ol>
+    <ol class="install-steps" id="stepsAndroid">
+      <li>Open this page in <strong>Chrome</strong>.</li>
+      <li>Tap the <strong>⋮</strong> menu in the top right.</li>
+      <li>Tap <strong>Add to Home screen</strong> (or <strong>Install app</strong>).</li>
+      <li>Confirm by tapping <strong>Add</strong> or <strong>Install</strong>.</li>
+    </ol>
+  </div>
+
 </main>
 
 <footer>
   ALERT TEAM · Built by Cristian Rosa, RN, MSN, CCRN
 </footer>
+
+<script>
+  (function() {
+    var banner = document.getElementById('installBanner');
+    var dismissKey = 'sentinel_install_banner_dismissed';
+
+    if (localStorage.getItem(dismissKey) === '1') {
+      banner.style.display = 'none';
+    }
+
+    document.getElementById('installDismiss').addEventListener('click', function() {
+      banner.style.display = 'none';
+      localStorage.setItem(dismissKey, '1');
+    });
+
+    var tabIOS = document.getElementById('tabIOS');
+    var tabAndroid = document.getElementById('tabAndroid');
+    var stepsIOS = document.getElementById('stepsIOS');
+    var stepsAndroid = document.getElementById('stepsAndroid');
+
+    tabIOS.addEventListener('click', function() {
+      tabIOS.classList.add('active');
+      tabAndroid.classList.remove('active');
+      stepsIOS.classList.add('active');
+      stepsAndroid.classList.remove('active');
+    });
+
+    tabAndroid.addEventListener('click', function() {
+      tabAndroid.classList.add('active');
+      tabIOS.classList.remove('active');
+      stepsAndroid.classList.add('active');
+      stepsIOS.classList.remove('active');
+    });
+
+    // Default to Android tab if it looks like an Android device
+    if (/Android/i.test(navigator.userAgent)) {
+      tabAndroid.click();
+    }
+  })();
+</script>
 
 </body>
 </html>
