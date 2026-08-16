@@ -52,7 +52,6 @@
   .pdf-panel-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .pdf-panel-hdr span { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text3); }
   .pdf-close-btn { font-size: 12px; color: var(--text2); background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 4px 10px; cursor: pointer; }
-  .pdf-panel iframe { width: 100%; height: 60vh; border: 1px solid var(--border2); border-radius: var(--radius); display: block; }
 
   .progress-row { display: flex; gap: 6px; margin-bottom: 1rem; }
   .progress-dot { flex: 1; height: 4px; border-radius: 2px; background: var(--border2); }
@@ -203,7 +202,7 @@
 
   <button class="overview-link" id="pdfToggle" type="button">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-    View the full sequence (PDF)
+    View the full sequence
   </button>
 
   <div class="pdf-panel" id="pdfPanel">
@@ -211,7 +210,7 @@
       <span>Full sequence reference</span>
       <button class="pdf-close-btn" id="pdfClose" type="button">Close</button>
     </div>
-    <iframe id="pdfFrame" src="" title="Shock sequence job aid PDF"></iframe>
+    <img class="ref-img" style="margin:0" src="assets/job-aid-page-1.jpg" alt="Full shock sequence job aid — four-step reference" />
   </div>
 
   <a class="back-link" href="index.html">
@@ -234,6 +233,8 @@
 
 <footer>
   Cristian Rosa, RN, MSN, CCRN &middot; ALERT Team, UCI Health &middot; No data leaves this device
+  <br />
+  <a href="index.html" style="color:var(--text3);text-decoration:underline">Sentinel home</a>
 </footer>
 
 <script>
@@ -380,9 +381,7 @@ document.getElementById('backBtn').addEventListener('click', () => {
 });
 
 const pdfPanel = document.getElementById('pdfPanel');
-const pdfFrame = document.getElementById('pdfFrame');
 document.getElementById('pdfToggle').addEventListener('click', () => {
-  if(!pdfFrame.src) pdfFrame.src = 'assets/shock-sequence-job-aid.pdf';
   pdfPanel.classList.add('open');
   pdfPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
