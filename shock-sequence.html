@@ -26,17 +26,23 @@
   header p { font-size: 12px; color: #9ca3af; margin-top: 1px; }
   .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
   .tag { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9ca3af; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 4px 10px; border-radius: 20px; }
+  .tag-stack { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+
+  .epi-bar-wrap { max-width: 480px; margin: 0 auto; padding: 0.6rem 1rem 0; display: flex; justify-content: flex-end; }
+  .epi-bar { width: auto; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; border-radius: 6px; border: none; background: var(--purple); color: #fff; font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0.01em; cursor: pointer; box-shadow: 0 2px 0 #5b21b6, 0 3px 8px rgba(124,58,237,0.3); transition: transform 0.08s, box-shadow 0.08s; white-space: nowrap; }
+  .epi-bar:active { transform: translateY(2px); box-shadow: 0 0px 0 #5b21b6, 0 1px 4px rgba(124,58,237,0.25); }
+  .epi-bar.logged { background: var(--green); box-shadow: 0 2px 0 #047857, 0 3px 8px rgba(5,150,105,0.3); font-family: 'SF Mono', Consolas, monospace; cursor: default; }
+  .epi-bar.logged:active { transform: none; box-shadow: 0 2px 0 #047857, 0 3px 8px rgba(5,150,105,0.3); }
   .code-timer { font-family: 'SF Mono', Consolas, monospace; font-size: 15px; font-weight: 700; color: #fbbf24; background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.25); padding: 4px 12px; border-radius: 20px; letter-spacing: 0.02em; }
   .code-timer-label { font-size: 8px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #92640a; display: block; text-align: center; margin-bottom: 1px; }
+  .shock-timer { font-family: 'SF Mono', Consolas, monospace; font-size: 15px; font-weight: 700; color: #f87171; background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.3); padding: 4px 12px; border-radius: 20px; letter-spacing: 0.02em; }
+  .epi-timer { font-family: 'SF Mono', Consolas, monospace; font-size: 15px; font-weight: 700; color: #c4b5fd; background: rgba(196,181,253,0.12); border: 1px solid rgba(196,181,253,0.3); padding: 4px 12px; border-radius: 20px; letter-spacing: 0.02em; }
 
   main { max-width: 480px; margin: 0 auto; padding: 1.5rem 1rem; }
 
   a.back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.15s; }
   a.back-link:hover { color: var(--text); }
   a.back-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
-  .caveat-card { background: var(--amber-bg); border: 1px solid var(--amber-border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 1.5rem; font-size: 13px; line-height: 1.6; color: var(--text); }
-  .caveat-card strong { color: var(--amber); }
 
   .overview-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--blue); background: none; border: none; cursor: pointer; text-decoration: none; margin-bottom: 1.5rem; padding: 0; font-family: inherit; }
   .overview-link:hover { text-decoration: underline; }
@@ -64,6 +70,7 @@
 
   .note-text { font-size: 13px; color: var(--text2); margin-bottom: 14px; line-height: 1.5; }
   .warn-note { font-size: 13px; font-weight: 600; color: var(--coral); background: var(--coral-bg); border: 1px solid var(--coral-border); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 16px; line-height: 1.5; }
+  .epi-reminder { font-size: 16px; font-weight: 700; color: var(--purple); background: var(--purple-bg); border: 1.5px solid var(--purple-border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 16px; text-align: center; letter-spacing: 0.01em; }
 
   .step-bullets { list-style: none; margin: 0 0 14px; padding: 0; }
   .step-bullets li { font-size: 17px; line-height: 1.6; color: var(--text); padding-left: 20px; position: relative; margin-bottom: 8px; }
@@ -96,6 +103,30 @@
   .control-btn { font-size: 12px; color: var(--text3); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 4px; }
 
   footer { text-align: center; padding: 1.5rem; font-size: 11px; color: var(--text3); border-top: 1px solid var(--border); margin-top: 2rem; }
+
+  .splash { max-width: 480px; margin: 0 auto; padding: 2.5rem 1.25rem 1.5rem; text-align: center; }
+  .splash-icon { width: 64px; height: 64px; margin: 0 auto 18px; background: var(--blue-bg); border: 1px solid var(--blue-border); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; }
+  .splash-icon svg { width: 32px; height: 32px; stroke: var(--blue); fill: var(--blue); }
+  .splash h2 { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .splash-sub { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+  .splash-built { text-align: left; background: var(--amber-bg); border: 1px solid var(--amber-border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; color: var(--text); }
+  .splash-built strong { color: var(--amber); }
+  .splash-list { text-align: left; list-style: none; margin: 0 0 28px; padding: 0; }
+  .splash-list li { font-size: 14px; line-height: 1.5; color: var(--text2); padding-left: 22px; position: relative; margin-bottom: 10px; }
+  .splash-list li::before { content: '\2713'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+  .amber-word { color: var(--amber); font-weight: 700; }
+
+  .benchmarks { display: flex; gap: 10px; margin-bottom: 20px; }
+  .benchmark { flex: 1; background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 12px 10px; text-align: center; }
+  .benchmark-label { display: block; font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 3px; }
+  .benchmark-val { display: block; font-size: 18px; font-weight: 700; color: var(--text); }
+
+  .rhythm-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .rhythm-pill { padding: 10px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; text-align: left; }
+  .rhythm-pill.shock { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+  .rhythm-pill.noshock { background: var(--blue-bg); border: 1px solid var(--blue-border); color: var(--blue); }
+  .splash-begin { width: 100%; padding: 20px; border-radius: var(--radius); border: none; font-size: 17px; font-weight: 700; color: #fff; background: #151c30; cursor: pointer; margin-bottom: 20px; }
+  .splash-begin:active { opacity: 0.8; }
 </style>
 </head>
 <body>
@@ -113,20 +144,62 @@
       <span class="code-timer-label">Code time</span>
       <div class="code-timer" id="codeTimer">00:00</div>
     </div>
-    <span class="tag">Code Blue Aid</span>
+    <div id="shockStat" style="display:none">
+      <span class="code-timer-label">1st shock</span>
+      <div class="shock-timer" id="shockTimer">--:--</div>
+    </div>
+    <div class="tag-stack">
+      <span class="tag">Code Blue Aid</span>
+    </div>
   </div>
 </header>
 
-<main>
+<div class="epi-bar-wrap">
+  <button class="epi-bar" id="epiBadge" type="button">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+    <span id="epiBadgeText">Log Epi Given</span>
+  </button>
+</div>
 
-  <a class="back-link" href="index.html">
-    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-    Back to home
-  </a>
-
-  <div class="caveat-card">
-    <strong>Built for mid-code use.</strong> One step at a time, big targets, no reading required. Timers here are informational only &mdash; they don't gate you from moving forward. Tap through at your own pace.
+<div class="splash" id="splash">
+  <div class="splash-icon">
+    <svg viewBox="0 0 24 24"><path d="M13 3L4 14h7l-1 7 9-11h-7l1-7z"/></svg>
   </div>
+  <h2>Shock Sequence</h2>
+  <div class="splash-sub">ALERT Team &middot; Code Blue Aid</div>
+
+  <div class="splash-built">
+    <strong>Built for mid-code use.</strong> One step at a time, big targets, no reading required. Timers here are informational only &mdash; they don't gate you from moving forward.
+  </div>
+
+  <ul class="splash-list">
+    <li>Get the Defib pads on as soon as possible</li>
+    <li>Everything in an <span class="amber-word">AMBER</span> box is a verbal callout</li>
+    <li>Confirm device is set to Defib mode</li>
+  </ul>
+
+  <div class="rhythm-row">
+    <div class="rhythm-pill shock">Shockable — VF / pVT</div>
+    <div class="rhythm-pill noshock">Non-shockable — PEA / Asystole</div>
+  </div>
+
+  <div class="warn-note" style="text-align:left">
+    <div>Do not push epi for shockable rhythms until 2 shock attempts have failed.</div>
+    <div style="margin-top:6px">Give epi as soon as rhythm is deemed not shockable.</div>
+  </div>
+
+  <div class="benchmarks">
+    <div class="benchmark">
+      <span class="benchmark-label">Time to shock</span>
+      <span class="benchmark-val">&lt; 2 min</span>
+    </div>
+    <div class="benchmark">
+      <span class="benchmark-label">Time to epi</span>
+      <span class="benchmark-val">&lt; 5 min</span>
+    </div>
+  </div>
+
+  <button class="splash-begin" id="splashBegin" type="button">Begin</button>
 
   <button class="overview-link" id="pdfToggle" type="button">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -140,6 +213,14 @@
     </div>
     <iframe id="pdfFrame" src="" title="Shock sequence job aid PDF"></iframe>
   </div>
+
+  <a class="back-link" href="index.html">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to home
+  </a>
+</div>
+
+<main id="appView" style="display:none">
 
   <div class="progress-row" id="progressRow"></div>
   <div id="stepwrap"></div>
@@ -158,9 +239,9 @@
 <script>
 const steps = [
   {
-    key:'precharge', leadIn:'<u>Get the pads on as soon as possible.</u>',
-    say:'PRECHARGING', bullets:['Confirm DEFIB mode'],
-    warnNote:'You must be ready to interpret the rhythm once compressions are stopped.',
+    key:'precharge',
+    say:'PRECHARGING — CONTINUE COMPRESSIONS',
+    warnNote:'You cannot interpret the rhythm while compressions are ongoing — BE READY to interpret the rhythm immediately upon pulse/rhythm check.',
     next:'PRESS CHARGE'
   },
   {
@@ -172,11 +253,11 @@ const steps = [
   }
 ];
 const shockPath = [
-  { key:'clear', say:'CLEAR', sweep:{ title:'PERFORM VISUAL SWEEP', sub:'Do not shock your team. No O2 source near the patient.' }, next:'Shock delivered' },
+  { key:'clear', say:'CLEAR', sweep:{ title:'PERFORM VISUAL SWEEP PRIOR TO SHOCK', sub:'Do not shock your team. No O2 source near the patient.' }, captureShockTime:true, next:'Shock delivered' },
   { key:'resume-shock', say:'RESUME COMPRESSIONS', note:'Don\'t recheck pulse.', next:'Next cycle', loopEnd:true }
 ];
 const nonShockPath = [
-  { key:'disarm', say:'DISARMING — RESUME COMPRESSIONS IMMEDIATELY', img:'assets/disarm-button.jpg', next:'Disarmed', loopEnd:true }
+  { key:'disarm', say:'DISARMING — RESUME COMPRESSIONS IMMEDIATELY', epiReminder:true, img:'assets/disarm-button.jpg', next:'Disarmed', loopEnd:true }
 ];
 
 let path = null, idx = 0, timerHandle = null, history = [];
@@ -215,6 +296,9 @@ function render(){
   }
   if(step.say){
     html += '<div class="say-card"><div class="say-label">Say</div><div class="say-text">' + step.say + '</div></div>';
+  }
+  if(step.epiReminder){
+    html += '<div class="epi-reminder">DON\'T FORGET TO PUSH EPI</div>';
   }
   if(step.note){
     html += '<p class="note-text">' + step.note + '</p>';
@@ -266,10 +350,10 @@ function render(){
       t += 0.1;
       tval.textContent = t.toFixed(1) + 's';
       if(t >= 4.5 && t < 4.6){
-        tlabel.textContent = 'device charged';
+        tlabel.textContent = 'Device will disarm 30 seconds after being charged';
         tlabel.classList.add('charged');
       }
-      if(t >= 10) clearInterval(timerHandle);
+      if(t >= 30) clearInterval(timerHandle);
     }, 100);
   }
 
@@ -279,6 +363,7 @@ function render(){
   } else {
     document.getElementById('bnext').onclick = () => {
       pushHistory();
+      if(step.captureShockTime) captureFirstShock();
       if(step.loopEnd){ path = null; idx = 0; render(); return; }
       idx++;
       render();
@@ -307,14 +392,50 @@ document.getElementById('pdfClose').addEventListener('click', () => {
 
 render();
 
+document.getElementById('splashBegin').addEventListener('click', () => {
+  document.getElementById('splash').style.display = 'none';
+  document.getElementById('appView').style.display = 'block';
+  startCodeTimer();
+});
+
 let codeSeconds = 0;
+let codeTimerHandle = null;
 const codeTimerEl = document.getElementById('codeTimer');
-setInterval(() => {
-  codeSeconds++;
-  const m = Math.floor(codeSeconds / 60);
-  const s = codeSeconds % 60;
-  codeTimerEl.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-}, 1000);
+function startCodeTimer(){
+  if(codeTimerHandle) return;
+  codeTimerHandle = setInterval(() => {
+    codeSeconds++;
+    const m = Math.floor(codeSeconds / 60);
+    const s = codeSeconds % 60;
+    codeTimerEl.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }, 1000);
+}
+
+let firstShockCaptured = false;
+function captureFirstShock(){
+  if(firstShockCaptured) return;
+  firstShockCaptured = true;
+  document.getElementById('shockTimer').textContent = formatClock(new Date());
+  document.getElementById('shockStat').style.display = 'block';
+}
+
+let firstEpiCaptured = false;
+function captureFirstEpi(){
+  if(firstEpiCaptured) return;
+  firstEpiCaptured = true;
+  const bar = document.getElementById('epiBadge');
+  bar.classList.add('logged');
+  bar.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Epi given — ' + formatClock(new Date()) + '</span>';
+}
+function formatClock(now){
+  let h = now.getHours();
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12; if(h === 0) h = 12;
+  return h + ':' + m + ':' + s + ' ' + ampm;
+}
+document.getElementById('epiBadge').addEventListener('click', captureFirstEpi);
 </script>
 
 </body>
