@@ -469,6 +469,8 @@
   }
 
   var selected = [];
+  var poolFixedOrder = ['b1', 'x2', 'b4', 'b3', 'x3', 'b2', 'x1', 's1', 's2', 's3', 's4', 'a1', 'a2', 'a3', 'a4', 'r1', 'r2', 'r3', 'x4'];
+  var poolOrder = poolFixedOrder.slice();
   var poolEl = document.getElementById('pool');
   var reportEl = document.getElementById('report');
   var counterEl = document.getElementById('counter');
@@ -502,6 +504,7 @@
     });
     targetLabel.textContent = TARGETS[a];
     selected = [];
+    poolOrder = poolFixedOrder.slice();
     feedbackEl.innerHTML = '';
     feedbackAsk.classList.remove('show');
     idealReveal.classList.remove('show');
@@ -531,7 +534,9 @@
   function render() {
     poolEl.innerHTML = '';
     reportEl.innerHTML = '';
-    var remaining = shuffle(allCards.filter(function (c) { return !findSelected(c.id); }));
+    var remaining = poolOrder
+      .map(function (id) { return allCards.filter(function (c) { return c.id === id; })[0]; })
+      .filter(function (c) { return !findSelected(c.id); });
     remaining.forEach(function (c) {
       var el = document.createElement('div');
       el.className = 'snippet-card';
