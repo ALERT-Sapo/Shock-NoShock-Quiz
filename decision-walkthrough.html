@@ -277,6 +277,22 @@
     .branch-arrow.alert { color: var(--red); }
     .branch-arrow.ok { color: var(--green); }
 
+    .sync-strip {
+      margin: 6px 0 8px 19px;
+      background: #0a0a0a;
+      border-radius: 6px;
+      padding: 8px 12px;
+      border: 1.5px solid #333;
+    }
+    .sync-strip-lbl {
+      font-size: 9px;
+      color: #ffffff;
+      font-family: monospace;
+      letter-spacing: 0.06em;
+      margin-bottom: 3px;
+    }
+    .sync-strip canvas { display: block; width: 100%; }
+
     .definition-box {
       margin-top: 10px;
       background: var(--bg3);
@@ -849,7 +865,7 @@ const scenarios = [
         text: 'Is the patient conscious?',
         branch: true,
         branches: [
-          { icon: 'alert', text: 'Unresponsive or rapidly deteriorating → prepare to cardiovert (synchronized) at 100J per AHA. You are credentialed to perform this without a provider present.' },
+          { icon: 'alert', text: 'Unresponsive or rapidly deteriorating → prepare to cardiovert (synchronized) at 100J per AHA. You are credentialed to perform this without a provider present.', syncStrip: 'vtach' },
           { icon: 'ok', text: 'Awake and communicating → prepare pads, monitor closely, wait for acute response team. Cardioversion in a conscious patient causes significant discomfort — provider makes sedation decision.' }
         ]
       }
@@ -967,7 +983,7 @@ const scenarios = [
         text: 'Is the patient conscious?',
         branch: true,
         branches: [
-          { icon: 'alert', text: 'Unresponsive or rapidly deteriorating → synchronized cardioversion 50–100J per provider order. Confirm sync mode is active on the ZOLL before delivering shock.' },
+          { icon: 'alert', text: 'Unresponsive or rapidly deteriorating → synchronized cardioversion 50–100J per provider order. Confirm sync mode is active on the ZOLL before delivering shock.', syncStrip: 'svt' },
           { icon: 'ok', text: 'Awake and communicating → prepare pads, monitor closely, wait for acute response team. Cardioversion in a conscious patient causes significant discomfort — provider makes sedation decision.' }
         ]
       }
@@ -1339,6 +1355,37 @@ function drawWalkthroughRhythm(canvasId, waveFn, isSvt){
   ctx.stroke();
 }
 
+function drawSyncStrip(canvasId, waveFn, r, markerU){
+  const cv = document.getElementById(canvasId); if(!cv) return;
+  const dpr = window.devicePixelRatio || 2;
+  const W = cv.parentElement.clientWidth - 24;
+  const H = 44;
+  cv.width = W * dpr; cv.height = H * dpr;
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  const ctx = cv.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.2; ctx.beginPath();
+  for(let x=0;x<W;x++){
+    const t=(x/W)*4;
+    const y = H/2 - waveFn(t)*(H*0.36);
+    x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  // Peak x-positions computed directly from the wave's period (not scanned pixel-by-pixel —
+  // a fixed-pixel dedup threshold breaks down on narrow/mobile canvases).
+  ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1;
+  for(let n=0;(n+markerU)*r<4;n++){
+    const t=(n+markerU)*r;
+    const px = Math.round((t/4)*W);
+    const peakY = H/2 - 0.98*(H*0.36) - 8;
+    const s = 3;
+    ctx.beginPath();
+    ctx.moveTo(px,peakY-s);ctx.lineTo(px+s,peakY);ctx.lineTo(px,peakY+s);ctx.lineTo(px-s,peakY);ctx.closePath();
+    ctx.stroke();
+  }
+}
+
 function renderZollBlock(scenario){
   if(!scenario.zoll) return '';
   const peaNote = scenario.peaNote
@@ -1379,16 +1426,29 @@ function toggleExamples(header) {
 }
 
 function scheduleWtRhythmDraw(scenario){
-  if(!scenario.zoll) return;
-  const waveFns={nsr:nsrWave,asystole:asystoleWave,vtach:vtachWave,vfib:vfibWave,svt:null,sbrad:sbradWave,jxn:jxnWave,avb1:avb1Wave,wenck:wenckWave,mobitz2:mobitz2Wave,chb:chbWave};
-  const isSvt = scenario.zoll==='svt';
-  const fn = waveFns[scenario.zoll]||nsrWave;
-  setTimeout(()=>drawWalkthroughRhythm('wtZollCanvas', fn, isSvt), 100);
-  if(scenario.zoll2){
-    const isSvt2 = scenario.zoll2==='svt';
-    const fn2 = waveFns[scenario.zoll2]||nsrWave;
-    setTimeout(()=>drawWalkthroughRhythm('wtZollCanvas2', fn2, isSvt2), 100);
+  if(scenario.zoll){
+    const waveFns={nsr:nsrWave,asystole:asystoleWave,vtach:vtachWave,vfib:vfibWave,svt:null,sbrad:sbradWave,jxn:jxnWave,avb1:avb1Wave,wenck:wenckWave,mobitz2:mobitz2Wave,chb:chbWave};
+    const isSvt = scenario.zoll==='svt';
+    const fn = waveFns[scenario.zoll]||nsrWave;
+    setTimeout(()=>drawWalkthroughRhythm('wtZollCanvas', fn, isSvt), 100);
+    if(scenario.zoll2){
+      const isSvt2 = scenario.zoll2==='svt';
+      const fn2 = waveFns[scenario.zoll2]||nsrWave;
+      setTimeout(()=>drawWalkthroughRhythm('wtZollCanvas2', fn2, isSvt2), 100);
+    }
   }
+  scenario.steps.forEach((step,si)=>{
+    if(!step.branch) return;
+    step.branches.forEach((b,bi)=>{
+      if(!b.syncStrip) return;
+      const canvasId = 'syncStrip-'+scenario.id+'-'+bi;
+      if(b.syncStrip==='svt'){
+        setTimeout(()=>drawSyncStrip(canvasId, t=>svtWave((t%0.22)/0.22), 0.22, 0.11), 100);
+      } else {
+        setTimeout(()=>drawSyncStrip(canvasId, vtachWave, 0.34, 0.445), 100);
+      }
+    });
+  });
 }
 
 
@@ -1512,11 +1572,17 @@ function renderWalkthrough(scenario) {
           ${step.caveats ? renderCaveatBox(step.caveats) : ''}
           ${step.branch ? `
             <div class="branch-box">
-              ${step.branches.map(b => `
+              ${step.branches.map((b, bi) => `
                 <div class="branch-row">
                   <span class="branch-arrow ${b.icon}">${b.icon === 'alert' ? '▶' : '▶'}</span>
                   <span>${b.text}</span>
                 </div>
+                ${b.syncStrip ? `
+                  <div class="sync-strip">
+                    <div class="sync-strip-lbl">SYNC ON &#9670; MARKERS CONFIRMED ON QRS</div>
+                    <canvas id="syncStrip-${scenario.id}-${bi}"></canvas>
+                  </div>
+                ` : ''}
               `).join('')}
             </div>
           ` : ''}
