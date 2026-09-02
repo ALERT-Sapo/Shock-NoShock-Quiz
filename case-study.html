@@ -17,6 +17,20 @@
       --radius: 10px; --radius-sm: 6px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    .lock-gate { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: var(--bg); }
+    .lock-card { width: 100%; max-width: 340px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 24px; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+    .lock-icon { font-size: 30px; margin-bottom: 10px; }
+    .lock-banner-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); background: var(--amber-bg); border: 1px solid var(--amber-border); border-radius: 20px; padding: 4px 12px; margin-bottom: 12px; }
+    .lock-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .lock-sub { font-size: 12.5px; color: var(--text2); line-height: 1.5; margin-bottom: 20px; }
+    .lock-label { display: block; font-size: 11px; color: var(--text3); text-align: left; margin-bottom: 6px; }
+    .lock-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border2); border-radius: var(--radius-sm); font-size: 14px; margin-bottom: 10px; background: var(--bg3); color: var(--text); }
+    .lock-input:focus { outline: none; border-color: var(--coral); }
+    .lock-btn { width: 100%; padding: 11px; background: var(--coral); border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: white; cursor: pointer; transition: background 0.15s; }
+    .lock-btn:hover { background: #c94f0a; }
+    .lock-error { font-size: 12px; color: var(--red); margin-top: 10px; }
+    .lock-back { display: inline-block; margin-top: 16px; font-size: 12px; color: var(--text3); text-decoration: none; }
+    .lock-back:hover { color: var(--text2); }
     body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; padding: 0 0 5rem; }
     header { background: #151c30; border-bottom: 3px solid; border-image: linear-gradient(90deg, #ea580c 0%, #2563eb 100%) 1; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 100; }
     .header-icon { width: 36px; height: 36px; background: var(--green-bg); border: 1px solid var(--green-border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -161,7 +175,21 @@
 </head>
 <body>
 
-<header>
+<div class="lock-gate" id="lockGate">
+  <div class="lock-card">
+    <div class="lock-icon">🚧</div>
+    <div class="lock-banner-badge">Under Construction</div>
+    <div class="lock-title">Case studies are getting a glow-up</div>
+    <div class="lock-sub">This tool is being revised. If you know the secret handshake, come on in.</div>
+    <label class="lock-label" for="lockPw">Password</label>
+    <input type="password" id="lockPw" class="lock-input" placeholder="•••••••••" autocomplete="off" />
+    <button class="lock-btn" onclick="tryUnlock()">Unlock</button>
+    <div class="lock-error" id="lockError" style="display:none;">Not quite — try again.</div>
+    <a class="lock-back" href="index.html">← Back to home</a>
+  </div>
+</div>
+
+<header id="siteHeader" style="display:none;">
   <div class="header-icon">
     <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
   </div>
@@ -172,7 +200,7 @@
   <span class="tag">Interactive Practice</span>
 </header>
 
-<main>
+<main id="siteMain" style="display:none;">
   <a class="back-link" href="index.html">
     <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
     Back to home
@@ -213,6 +241,39 @@
 <!-- <script src="cases/vtach-stable.js"></script> -->
 <!-- <script src="cases/pea.js"></script>          -->
 <!-- <script src="cases/asystole.js"></script>     -->
+
+<script>
+(function(){
+  var LOCK_PW = 'childlock2026';
+  var LOCK_KEY = 'sentinel_case_study_unlocked';
+
+  function unlockUI(){
+    document.getElementById('lockGate').style.display = 'none';
+    document.getElementById('siteHeader').style.display = '';
+    document.getElementById('siteMain').style.display = '';
+  }
+
+  window.tryUnlock = function(){
+    var input = document.getElementById('lockPw');
+    if (input.value === LOCK_PW) {
+      sessionStorage.setItem(LOCK_KEY, 'true');
+      unlockUI();
+    } else {
+      document.getElementById('lockError').style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  };
+
+  if (sessionStorage.getItem(LOCK_KEY) === 'true') {
+    unlockUI();
+  } else {
+    var pwInput = document.getElementById('lockPw');
+    pwInput.addEventListener('keydown', function(e){ if (e.key === 'Enter') tryUnlock(); });
+    pwInput.focus();
+  }
+})();
+</script>
 
 <script>
 const REGISTRY = [];
@@ -1141,7 +1202,7 @@ function nsrWave(t){const r=0.83,p=t%r;if(p<0.09)return 0.15*Math.sin(Math.PI*p/
 function asystoleWave(t){return Math.sin(t*7.3)*0.025+Math.sin(t*13.1)*0.018;}
 function vtachWave(t){const r=0.34,p=t%r,u=p/r;if(u<0.12)return -0.15+u/0.12*0.30;if(u>=0.12&&u<0.22)return 0.15+(u-0.12)/0.10*0.35+0.12*Math.sin(Math.PI*(u-0.12)/0.10);if(u>=0.22&&u<0.38)return 0.50+(u-0.22)/0.16*0.48;if(u>=0.38&&u<0.52)return 0.98-0.22*(1-Math.cos(Math.PI*(u-0.38)/0.14));if(u>=0.52&&u<0.66)return 0.76-(u-0.52)/0.14*1.03;if(u>=0.66&&u<0.76)return -0.27-(u-0.66)/0.10*0.28;if(u>=0.76&&u<0.88)return -0.55+(u-0.76)/0.12*0.40;return -0.15;}
 function vfibWave(t){const env=0.68-0.15*(t/4);return env*(0.42*Math.sin(t*58.3+Math.sin(t*7.1)*2.4)+0.28*Math.sin(t*79.7+Math.sin(t*11.3)*1.9)+0.20*Math.sin(t*43.1+Math.sin(t*14.2)*1.5)+0.15*Math.sin(t*97.2+Math.sin(t*5.7)*2.1)+0.10*Math.sin(t*67.8+2.3));}
-function svtWave(t){const r=0.22,u=(t%r)/r;const ease=f=>(1-Math.cos(Math.PI*f))/2;if(u<0.083){const f=u/0.083;return -0.05+f*1.20;}if(u<0.188){const f=(u-0.083)/0.105;return 1.15-f*1.25;}if(u<0.25){const f=(u-0.188)/0.062;return -0.10+f*0.10;}if(u<0.667){const f=(u-0.25)/0.417;return 0.52*ease(f);}const f=(u-0.667)/0.333;return 0.52-ease(f)*0.57;}
+function svtWave(t){const r=0.22,u=(t%r)/r;if(u<0.08)return 0;if(u>=0.08&&u<0.13)return(u-0.08)/0.05*1.15;if(u>=0.13&&u<0.17)return 1.15-(u-0.13)/0.04*1.15;if(u>=0.17&&u<0.23)return-(u-0.17)/0.06*0.52;if(u>=0.23&&u<0.26)return-0.52+(u-0.23)/0.03*0.52;if(u>=0.26&&u<0.38)return 0;if(u>=0.38&&u<0.56){const x=(u-0.38)/0.18;return 0.24*Math.pow(Math.sin(Math.PI*x),1.6);}return 0;}
 function svtPauseWave(t){return t<2 ? svtWave(t) : asystoleWave(t);}
 function drawRhythm(canvasId,waveFn){
   const cv=document.getElementById(canvasId);if(!cv)return;
@@ -1177,10 +1238,10 @@ function drawSyncMarkers(){
   ctx.scale(dpr,dpr);
   ctx.fillStyle='#0a0a0a'; ctx.fillRect(0,0,W,H);
   ctx.strokeStyle='#4ade80'; ctx.lineWidth=1.2; ctx.beginPath();
-  const PERIOD=0.34, U_MARK=0.445; // marker sits mid-band (u 0.43-0.46), just past the R-wave peak
+  const peakXs=[];
   for(let x=0;x<W;x++){
     const t=(x/W)*4;
-    const u=(t%PERIOD)/PERIOD;
+    const u=(t%0.34)/0.34;
     let y;
     if(u<0.12)y=-0.15+u/0.12*0.30;
     else if(u<0.22)y=0.15+(u-0.12)/0.10*0.35+0.12*Math.sin(Math.PI*(u-0.12)/0.10);
@@ -1192,16 +1253,9 @@ function drawSyncMarkers(){
     else y=-0.15;
     const cy=H/2-y*(H*0.36);
     x===0?ctx.moveTo(x,cy):ctx.lineTo(x,cy);
+    if(u>=0.43&&u<=0.46){const last=peakXs[peakXs.length-1];if(!last||x-last>30)peakXs.push(x);}
   }
   ctx.stroke();
-  // Peak x-positions computed directly from the wave's period, not scanned pixel-by-pixel.
-  // A fixed-pixel dedup gap breaks down when the canvas (and therefore the beat spacing) is
-  // narrow, as on phones — this is exact at any width.
-  const peakXs=[];
-  for(let n=0;(n+U_MARK)*PERIOD<4;n++){
-    const t=(n+U_MARK)*PERIOD;
-    peakXs.push(Math.round((t/4)*W));
-  }
   ctx.strokeStyle='#ffffff'; ctx.lineWidth=1;
   peakXs.forEach(px=>{
     const peakY=H/2-0.98*(H*0.36)-10; const s=3;
