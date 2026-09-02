@@ -141,6 +141,7 @@
       gap: 14px;
       transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
       cursor: pointer;
+      position: relative;
     }
 
     .tool-card:hover {
@@ -201,6 +202,9 @@
     .card-tag.sbar { color: var(--purple); }
     .card-tag.pacing { color: var(--amber); }
     .card-tag.shock { color: var(--blue); }
+
+    .construction-badge { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--amber); background: var(--amber-bg); border-bottom: 1px solid var(--amber-border); padding: 7px 10px; margin: -24px -20px 0 -20px; border-radius: 12px 12px 0 0; }
+    .construction-badge svg { width: 12px; height: 12px; stroke: var(--amber); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
     .card-title {
       font-size: 16px;
@@ -529,13 +533,17 @@
     </a>
 
     <a class="tool-card cases" href="case-study.html">
+      <span class="construction-badge">
+        <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+        Under Construction
+      </span>
       <div class="card-icon cases">
         <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
       </div>
       <div class="card-body">
         <div class="card-tag cases">Interactive Cases</div>
         <div class="card-title">ACLS Case Studies</div>
-        <div class="card-desc">Work through real clinical scenarios, make decisions, and see the consequences unfold.</div>
+        <div class="card-desc">Work through real clinical scenarios, make decisions, and see the consequences unfold. Currently being revised — password required.</div>
       </div>
       <div class="card-footer">
         <span class="card-meta">Practice · Decision-based</span>
